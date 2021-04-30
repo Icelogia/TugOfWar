@@ -1,14 +1,13 @@
 package Client;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class TugOfWarClient extends Application
 {
-
     public static void main(String[] args) 
     {
         launch(args);
@@ -17,12 +16,9 @@ public class TugOfWarClient extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        StackPane stackPane = new StackPane();
-        Button joinButton = new Button("Join");
-
-        stackPane.getChildren().add(joinButton);
-
-        var scene = new Scene(stackPane, 400, 600);
+        var loader = new FXMLLoader(this.getClass().getResource("view/JoinServerMenu.fxml"));
+        Pane pane = loader.load();
+        var scene = new Scene(pane);
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("JoinWindow");
