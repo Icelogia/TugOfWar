@@ -1,6 +1,8 @@
 package Client.controllers;
 
 import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,7 +16,7 @@ import javafx.scene.Node;
 public class JoinServerMenuController 
 {
     private String serverIP = "localhost";
-    private String port = "4444";
+    private int port = 4444;
     private String nickname = "Player";
 
     private JoinServerMenuController mainController;
@@ -46,7 +48,7 @@ public class JoinServerMenuController
     @FXML
     public void SetServerPort()
     {
-        port = portField.getText();
+        port = Integer.parseInt(portField.getText());
     }
 
     @FXML
@@ -69,12 +71,40 @@ public class JoinServerMenuController
             e.printStackTrace();
         }
 
+        SetGameController(loader);
+        ActiveGameScene(pane, event);
+    }
+
+    private Socket GetClientSocket()
+    {
+        Socket socket = null;
+        try 
+        {
+            socket = new Socket(serverIP, port);
+        } 
+        catch (UnknownHostException e) 
+        {
+            e.printStackTrace();
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
+
+        return socket;
+    }
+    
+    private void SetGameController(FXMLLoader loader)
+    {
         GameWindowController gameController = loader.getController();
-
         gameController.SetMainController(mainController);
-        //gameController.SetClientDirection();
-        //gameController.SetClientSocket();
 
+        Socket socket = GetClientSocket();
+        gameController.SetClientSocket(socket);
+    }
+
+    private void ActiveGameScene(Pane pane, ActionEvent event)
+    {
         var gameScene = new Scene(pane);
         Stage appStage = (Stage)((Node)event.getSource()).getScene().getWindow();
         appStage.hide();

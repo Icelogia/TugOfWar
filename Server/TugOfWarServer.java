@@ -11,6 +11,10 @@ public class TugOfWarServer
         int portNumber = 4444;
         ServerSocket serverSocket = null;
 
+
+        ServerBehaviour server = new ServerBehaviour();
+        ClientThread[] clientThreads = new ClientThread[server.maxPlayers];
+
         try
         {
             serverSocket = new ServerSocket(portNumber);
@@ -25,19 +29,29 @@ public class TugOfWarServer
         {
             Socket clientSocket = null;
             boolean isConnected = true;
-            try
-            {
-                clientSocket = serverSocket.accept();
-            }
-            catch(IOException ioe)
-            {
-                System.out.println("Couldn't create client!");
-                isConnected = false;
-            }
 
-            if(isConnected)
+            if(!server.isLobbyFull())
             {
-                //Create Client Thread
+                try
+                {
+                    clientSocket = serverSocket.accept();
+                }
+                catch(IOException ioe)
+                {
+                    System.out.println("Couldn't create client!");
+                    isConnected = false;
+                }
+    
+                if(isConnected)
+                {
+                    ClientThread newClient = new ClientThread(clientSocket, server);
+                    int currnetAmountOfClients = server.GetAmountOfClients();
+    
+                    clientThreads[currnetAmountOfClients] = new ClientThread(newClient);
+                    clientThreads[currnetAmountOfClients].start();
+    
+                    server.IncreaseAmountOfClientsBy(1);
+                }
             }
         }
 
