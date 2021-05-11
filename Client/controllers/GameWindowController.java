@@ -1,4 +1,8 @@
 package Client.controllers;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 
@@ -13,37 +17,49 @@ public class GameWindowController
 
     private Socket clientSocket;
 
-    private int clientDirection = 1;
-    final private int amountOfPixelsToMove = 10;
-
     private JoinServerMenuController mainController;
+
+    private PrintWriter pr;
+    private InputStreamReader in;
+    private BufferedReader bf;
 
     public void SetMainController(JoinServerMenuController mainController)
     {
         this.mainController = mainController;
     }
-    
-    public void SetClientDirection(int dir)
-    {
-        clientDirection = dir;
-    }
 
     public void SetClientSocket(Socket socket)
     {
         clientSocket = socket;
+
+        try 
+        {
+            pr = new PrintWriter(clientSocket.getOutputStream());
+            in = new InputStreamReader(clientSocket.getInputStream());
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
+
+        bf = new BufferedReader(in);
+
+        StartGame();
     }
 
-    public void UpdateGame()
+    public void StartGame()
     {
-        //while game is not over from server
-        //get position of rope
+        UpdateGame update = new UpdateGame(bf, rope);
+        update.start();
     }
+
+    
 
     @FXML
     public void Pull()
     {
         //Send info to server about input
-        double newXPosition = clientDirection * amountOfPixelsToMove + rope.getX();
-        rope.setX(newXPosition);
+        pr.println("Pull");
+        pr.flush();
     }
 }

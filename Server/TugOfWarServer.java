@@ -35,6 +35,7 @@ public class TugOfWarServer
                 try
                 {
                     clientSocket = serverSocket.accept();
+                    System.out.println("Client connected!");
                 }
                 catch(IOException ioe)
                 {

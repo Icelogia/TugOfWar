@@ -81,6 +81,7 @@ public class JoinServerMenuController
         try 
         {
             socket = new Socket(serverIP, port);
+            System.out.println(socket);
         } 
         catch (UnknownHostException e) 
         {
