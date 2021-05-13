@@ -13,7 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
-public class JoinServerMenuController 
+public class JoinServerMenuController
 {
     private String serverIP = "localhost";
     private int port = 4444;
@@ -75,6 +75,15 @@ public class JoinServerMenuController
         ActiveGameScene(pane, event);
     }
 
+    private void ActiveGameScene(Pane pane, ActionEvent event) 
+    {
+        var scene = new Scene(pane);
+        Stage appStage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        appStage.hide();
+        appStage.setScene(scene);
+        appStage.show();
+    }
+
     private Socket GetClientSocket()
     {
         Socket socket = null;
@@ -102,14 +111,5 @@ public class JoinServerMenuController
 
         Socket socket = GetClientSocket();
         gameController.SetClientSocket(socket);
-    }
-
-    private void ActiveGameScene(Pane pane, ActionEvent event)
-    {
-        var gameScene = new Scene(pane);
-        Stage appStage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        appStage.hide();
-        appStage.setScene(gameScene);
-        appStage.show();
     }
 }

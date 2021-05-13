@@ -2,17 +2,19 @@ package Server;
 
 public class ServerBehaviour
 {
-    public final int maxPlayers = 4;
+    public final int maxPlayers = 2;
     private int currnetAmountOfClients = 0;
-    private boolean isGameStarted = true;
+    private boolean isGameInProgress = false;
 
     final private int amountOfPixelsToMove = 5;
     private int ropePosition = 0;
     private int ropeWinLength = 100;
 
-    public boolean IsGameStarted()
+    private Team winTeam;
+
+    synchronized public boolean IsGameInProgress()
     {
-        return this.isGameStarted;
+        return this.isGameInProgress;
     }
 
     public int GetAmountOfClients()
@@ -26,7 +28,10 @@ public class ServerBehaviour
 
         if(this.currnetAmountOfClients == this.maxPlayers)
         {
-            isGameStarted = true;
+            winTeam = null;
+            ropePosition = 0;
+
+            isGameInProgress = true;
         }
     }
 
@@ -37,13 +42,40 @@ public class ServerBehaviour
 
     synchronized public void MoveRope(int direction)
     {
-        System.out.println("Rope position: " + ropePosition);
+        
         ropePosition += direction * amountOfPixelsToMove;
-        System.out.println("Rope position 2: " + ropePosition);
+        System.out.println("Rope position: " + ropePosition);
+        
+        if(Math.abs(ropePosition) >= ropeWinLength)
+        {
+            GameOver();
+        }
+        
+    }
+
+    private void GameOver() 
+    {
+        isGameInProgress = false;
+
+        if(ropePosition < 0)
+        {
+            winTeam = Team.Left;
+            System.out.println("Team left win");
+        }
+        else if(ropePosition > 0)
+        {
+            winTeam = Team.Right;
+            System.out.println("Team right win");
+        }
     }
 
     public int GetRopePositionTowardsZero()
     {
         return ropePosition;
+    }
+
+    public Team GetWinTeam()
+    {
+        return winTeam;
     }
 }

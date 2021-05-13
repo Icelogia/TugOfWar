@@ -19,6 +19,9 @@ public class ClientThread extends Thread
     private InputStreamReader in;
     private BufferedReader bf;
 
+    final String winMsg = "Win";
+    final String loseMsg = "Lose";
+
     public ClientThread(Socket currentClient, ServerBehaviour server)
     {
         this.client = currentClient;
@@ -52,33 +55,56 @@ public class ClientThread extends Thread
     {
         SetCommunicationWithClient();
 
-        while(!server.IsGameStarted()) 
+        while(!server.IsGameInProgress()) 
         {
             //Wait until game starts
+            System.out.println(clientDirection);
         }
 
-        while(server.IsGameStarted())
+        while(server.IsGameInProgress())
         {
+            System.out.println(clientDirection + "1");
             //get input
-            ClientMoveRope();
+            ClientInput();
             //give output to client
             ClientSendRopePosition();
         }
+
+        //Send info about winner team
+        ClientSendWinTeam();
         
     }
 
     private void ClientSendRopePosition() 
     {
+        System.out.println(clientDirection + "4");
         pr.println(server.GetRopePositionTowardsZero());
         pr.flush();
     }
 
-    private void ClientMoveRope()
+    private void ClientSendWinTeam()
+    {
+        Team winTeam = server.GetWinTeam();
+        if(winTeam == team)
+        {
+            pr.println(winMsg);
+        }
+        else
+        {
+            pr.println(loseMsg);
+        }
+        
+    }
+
+    private void ClientInput()
     {
         try 
         {
-            if( bf.readLine().equals("Pull"))
+            String clientMsg = bf.readLine();
+            System.out.println(clientDirection + "2");
+            if(clientMsg.equals("Pull"))
             {
+                System.out.println(clientDirection + "4");
                 server.MoveRope(clientDirection);
             }
                 
