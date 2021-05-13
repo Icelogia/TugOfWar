@@ -12,11 +12,6 @@
             <Font size="40.0" />
          </font>
       </Label>
-      <Button fx:id="playAgainButton" layoutX="210.0" layoutY="168.0" mnemonicParsing="false" onAction="#PlayAgain" text="Play Again" textAlignment="CENTER">
-         <font>
-            <Font size="30.0" />
-         </font>
-      </Button>
       <Button fx:id="leaveButton" layoutX="242.0" layoutY="264.0" mnemonicParsing="false" onAction="#Leave" text="Leave" textAlignment="CENTER">
          <font>
             <Font size="30.0" />

@@ -75,6 +75,11 @@ public class GameWindowController extends Control implements OnGameFinishedListi
     {
         //Load restat window
         var loader = new FXMLLoader(this.getClass().getResource("../view/RestartWindow.fxml"));
+        Platform.runLater(()->{
+            RestartWindowController restartWindowController = loader.getController();
+            restartWindowController.SetWinLabel(winLoseInfo);
+        } );
+        
 
         Pane pane = null;
         try 

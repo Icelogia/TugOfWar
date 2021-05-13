@@ -17,15 +17,11 @@ public class JoinServerMenuController
 {
     private String serverIP = "localhost";
     private int port = 4444;
-    private String nickname = "Player";
 
     private JoinServerMenuController mainController;
 
     @FXML
     private Pane joinServerMenuPane;
-
-    @FXML
-    private TextField nicknameField;
 
     @FXML
     private TextField serverIPField;
@@ -49,12 +45,6 @@ public class JoinServerMenuController
     public void SetServerPort()
     {
         port = Integer.parseInt(portField.getText());
-    }
-
-    @FXML
-    public void SetNickname()
-    {
-        nickname = nicknameField.getText();
     }
 
     @FXML
