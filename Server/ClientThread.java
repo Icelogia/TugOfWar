@@ -94,6 +94,7 @@ public class ClientThread extends Thread
             pr.println(loseMsg);
         }
         
+        pr.flush();
     }
 
     private void ClientInput()

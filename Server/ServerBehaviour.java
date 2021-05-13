@@ -2,7 +2,7 @@ package Server;
 
 public class ServerBehaviour
 {
-    public final int maxPlayers = 2;
+    public final int maxPlayers = 1;
     private int currnetAmountOfClients = 0;
     private boolean isGameInProgress = false;
 

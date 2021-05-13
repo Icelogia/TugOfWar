@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javafx.application.Platform;
 import javafx.scene.image.ImageView;
 
 public class UpdateGame extends Thread
@@ -33,6 +34,7 @@ public class UpdateGame extends Thread
     @Override
     public void run()
     {
+
         while(isGameInProgress)
         {
             GetInfoFromServer();
@@ -49,7 +51,6 @@ public class UpdateGame extends Thread
 
     private void SetRopePosition() 
     {
-        System.out.println(newXPosition);
         rope.setX(newXPosition);
     }
 
@@ -58,22 +59,20 @@ public class UpdateGame extends Thread
         try 
         {
             String msg = bf.readLine();
-            
+            System.out.println(msg);
+
             if(msg.equals("Win"))
             {
-                System.out.println(msg);
                 isGameInProgress = false;
-                gameFinishedListiner.FinishGame(winInfo);
+                Platform.runLater(() -> gameFinishedListiner.FinishGame(winInfo));
             }
             else if(msg.equals("Lose"))
             {
-                System.out.println(msg);
                 isGameInProgress = false;
-                gameFinishedListiner.FinishGame(loseInfo);
+                Platform.runLater(() -> gameFinishedListiner.FinishGame(loseInfo));
             }
             else
             {
-                System.out.println(msg);
                 newXPosition = Integer.parseInt(msg);
             }
             

@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ResourceBundle.Control;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -73,7 +74,8 @@ public class GameWindowController extends Control implements OnGameFinishedListi
     public void FinishGame(String winLoseInfo) 
     {
         //Load restat window
-        var loader = new FXMLLoader(this.getClass().getResource("view/RestartWindow.fxml"));
+        var loader = new FXMLLoader(this.getClass().getResource("../view/RestartWindow.fxml"));
+
         Pane pane = null;
         try 
         {
