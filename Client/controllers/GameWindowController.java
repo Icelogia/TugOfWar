@@ -11,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -26,16 +25,9 @@ public class GameWindowController extends Control implements OnGameFinishedListi
 
     private Socket clientSocket;
 
-    private JoinServerMenuController mainController;
-
     private PrintWriter pr;
     private InputStreamReader in;
     private BufferedReader bf;
-
-    public void SetMainController(JoinServerMenuController mainController)
-    {
-        this.mainController = mainController;
-    }
 
     public void SetClientSocket(Socket socket)
     {

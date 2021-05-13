@@ -18,8 +18,14 @@
             <Font size="30.0" />
          </font>
       </Label>
-      <TextField layoutX="57.0" layoutY="150.0" onAction="#SetServerIP" prefHeight="50.0" prefWidth="300.0" />
-      <TextField layoutX="384.0" layoutY="150.0" onAction="#SetServerPort" prefHeight="50.0" prefWidth="160.0" />
+      <TextField layoutX="57.0" layoutY="150.0" onAction="#SetServerIP" prefHeight="50.0" prefWidth="300.0" promptText="localhost">
+         <font>
+            <Font size="24.0" />
+         </font></TextField>
+      <TextField layoutX="384.0" layoutY="150.0" onAction="#SetServerPort" prefHeight="50.0" prefWidth="160.0" promptText="4444">
+         <font>
+            <Font size="24.0" />
+         </font></TextField>
       <Button fx:id="JoinButton" layoutX="251.0" layoutY="250.0" mnemonicParsing="false" onAction="#JoinToServer" prefHeight="50.0" prefWidth="99.0" text="Join">
          <font>
             <Font size="30.0" />

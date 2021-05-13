@@ -18,8 +18,6 @@ public class JoinServerMenuController
     private String serverIP = "localhost";
     private int port = 4444;
 
-    private JoinServerMenuController mainController;
-
     @FXML
     private Pane joinServerMenuPane;
 
@@ -28,12 +26,6 @@ public class JoinServerMenuController
 
     @FXML
     private TextField portField;
-
-    @FXML
-    public void initialize()
-    {
-        mainController = this;
-    }
 
     @FXML
     public void SetServerIP()
@@ -97,8 +89,6 @@ public class JoinServerMenuController
     private void SetGameController(FXMLLoader loader)
     {
         GameWindowController gameController = loader.getController();
-        gameController.SetMainController(mainController);
-
         Socket socket = GetClientSocket();
         gameController.SetClientSocket(socket);
     }
