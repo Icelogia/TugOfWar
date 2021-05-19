@@ -9,6 +9,8 @@ import java.net.Socket;
 public class ClientThread extends Thread
 {
     private Socket client = null;
+    private final int timeout = 10;
+
     private ServerBehaviour server = null;
     private Team team;
 
@@ -151,16 +153,12 @@ public class ClientThread extends Thread
     {
         try 
         {
-            if(bf.read() == -1)
-            {
-                return false;
-            }
-        }
+            return client.getInetAddress().isReachable(timeout);
+        } 
         catch (IOException e) 
         {
             e.printStackTrace();
+            return false;
         }
-
-        return true;
     }
 }

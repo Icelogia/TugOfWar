@@ -61,7 +61,7 @@ public class TugOfWarServer
                     }
                 }
 
-                for(int i = 0; i <= server.GetAmountOfClients(); i++)
+                for(int i = 0; i < clientThreads.size(); i++)
                 {
                     if(!clientThreads.get(i).isAlive())
                     {
