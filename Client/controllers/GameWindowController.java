@@ -4,18 +4,23 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ResourceBundle.Control;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class GameWindowController extends Control implements OnGameFinishedListiner
+public class GameWindowController implements OnGameUpdateListiner 
 {
+    @FXML
+    private Label teamLeftNumber;
+
+    @FXML
+    private Label teamRightNumber;
 
     @FXML
     private ImageView rope;
@@ -86,7 +91,25 @@ public class GameWindowController extends Control implements OnGameFinishedListi
 
         Stage stage = (Stage)gamePane.getScene().getWindow();
         stage.setScene(scene);
-        stage.setTitle("JoinWindow");
+        stage.setTitle("Restart Window");
         stage.show();
+    }
+
+    @Override
+    public void UpdateAmountOfLeftPlayers(int value)
+    {
+        UpdateAmountOfPlayers(value, teamLeftNumber);
+    }
+
+    @Override
+    public void UpdateAmountOfRightPlayers(int value)
+    {
+        UpdateAmountOfPlayers(value, teamRightNumber);
+    }
+
+    private void UpdateAmountOfPlayers(int value, Label amountLabel)
+    {
+        String v = "" + value;
+        amountLabel.setText(v);
     }
 }

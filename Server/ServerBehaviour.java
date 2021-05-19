@@ -2,6 +2,8 @@ package Server;
 
 public class ServerBehaviour
 {
+    private int amountOfLeftTeam;
+    private int amountOfRightTeam;
     public final int maxPlayers = 2;
     private int currnetAmountOfClients = 0;
     private boolean isGameInProgress = false;
@@ -22,7 +24,17 @@ public class ServerBehaviour
         return currnetAmountOfClients;
     }
 
-    public void IncreaseAmountOfClientsBy(int value)
+    public int GetAmountOfLeftClients()
+    {
+        return amountOfLeftTeam;
+    }
+
+    public int GetAmountOfRightClients()
+    {
+        return amountOfRightTeam;
+    }
+
+    public void IncreaseAmountOfClientsBy(int value, Team team)
     {
         this.currnetAmountOfClients += value;
 
@@ -32,6 +44,20 @@ public class ServerBehaviour
             ropePosition = 0;
 
             isGameInProgress = true;
+        }
+
+        IncreaseAmountInTeams(value, team);
+    }
+
+    private void IncreaseAmountInTeams(int value, Team team)
+    {
+        if(team == Team.Left)
+        {
+            this.amountOfLeftTeam += value;
+        }
+        else if(team == Team.Right)
+        {
+            this.amountOfRightTeam += value;
         }
     }
 

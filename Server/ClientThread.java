@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-
 public class ClientThread extends Thread
 {
     private Socket client = null;
@@ -21,6 +20,10 @@ public class ClientThread extends Thread
 
     final String winMsg = "Win";
     final String loseMsg = "Lose";
+
+    //Needs space after msg because of number of players in msg
+    final String leftTeamMsg = "Left ";
+    final String rightTeamMsg = "Right ";
 
     public ClientThread(Socket currentClient, ServerBehaviour server)
     {
@@ -53,17 +56,16 @@ public class ClientThread extends Thread
     @Override
     public void run()
     {
-        SetCommunicationWithClient();
-
-        while(!server.IsGameInProgress()) 
+        while(!server.IsGameInProgress() && CheckConnectionWithClient()) 
         {
             //Wait until game starts
-            System.out.println(clientDirection);
+            //System.out.println(clientDirection);
+            
         }
 
-        while(server.IsGameInProgress())
+        while(server.IsGameInProgress() && CheckConnectionWithClient())
         {
-            System.out.println(clientDirection + "1");
+            System.out.println("Client direction " + clientDirection);
             //get input
             ClientInput();
             //give output to client
@@ -71,8 +73,13 @@ public class ClientThread extends Thread
         }
 
         //Send info about winner team
-        ClientSendWinTeam();
-        
+        if(CheckConnectionWithClient())
+            ClientSendWinTeam();
+    }
+
+    public Team GetTeam()
+    {
+        return this.team;
     }
 
     private void ClientSendRopePosition() 
@@ -97,6 +104,15 @@ public class ClientThread extends Thread
         pr.flush();
     }
 
+    public void ClientUpdateTeamsNumber()
+    {
+        int amount = 0;
+        amount = server.GetAmountOfLeftClients();
+        pr.println(leftTeamMsg + amount);
+        amount = server.GetAmountOfRightClients();
+        pr.println(rightTeamMsg + amount);
+    }
+
     private void ClientInput()
     {
         try 
@@ -116,7 +132,7 @@ public class ClientThread extends Thread
         }
     }
 
-    private void SetCommunicationWithClient()
+    public void SetCommunicationWithClient()
     {
         try 
         {
@@ -129,5 +145,22 @@ public class ClientThread extends Thread
         }
 
         bf = new BufferedReader(in);
+    }
+
+    private boolean CheckConnectionWithClient()
+    {
+        try 
+        {
+            if(bf.read() == -1)
+            {
+                return false;
+            }
+        }
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
+
+        return true;
     }
 }

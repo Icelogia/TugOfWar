@@ -18,32 +18,31 @@ public class UpdateGame extends Thread
     final String loseInfo = "You lose!";
     final String activeMsg = "Active";
     
-    OnGameFinishedListiner gameFinishedListiner;
+    OnGameUpdateListiner  gameUpdateListiner;
 
     double newXPosition = 0;
 
-    public UpdateGame(BufferedReader bf, PrintWriter pr, ImageView rope, OnGameFinishedListiner listiner)
+    public UpdateGame(BufferedReader bf, PrintWriter pr, ImageView rope, OnGameUpdateListiner  listiner)
     {
         this.bf = bf;
         this.pr = pr;
         this.rope = rope;
-        this.gameFinishedListiner = listiner;
+        this.gameUpdateListiner = listiner;
         newXPosition = rope.getX();
     }
     
     @Override
     public void run()
     {
-
         while(isGameInProgress)
         {
+            ServerActiveClient();
             GetInfoFromServer();
             SetRopePosition();
-            ServerActiveClientChecker();
         } 
     }
 
-    private void ServerActiveClientChecker() 
+    private void ServerActiveClient() 
     {
         pr.println("Active");
         pr.flush();
@@ -64,12 +63,27 @@ public class UpdateGame extends Thread
             if(msg.equals("Win"))
             {
                 isGameInProgress = false;
-                Platform.runLater(() -> gameFinishedListiner.FinishGame(winInfo));
+                Platform.runLater(() -> gameUpdateListiner.FinishGame(winInfo));
             }
             else if(msg.equals("Lose"))
             {
                 isGameInProgress = false;
-                Platform.runLater(() -> gameFinishedListiner.FinishGame(loseInfo));
+                Platform.runLater(() -> gameUpdateListiner.FinishGame(loseInfo));
+            }
+            else if(msg.contains("Left"))
+            {
+                System.out.println(msg + " " + "Update ");
+                String[] amountMsg = msg.split(" ");
+                int amount = Integer.parseInt(amountMsg[1]);
+                Platform.runLater(() -> gameUpdateListiner.UpdateAmountOfLeftPlayers(amount));
+                
+            }
+            else if(msg.contains("Right"))
+            {
+                System.out.println(msg + " " + "Update ");
+                String[] amountMsg = msg.split(" ");
+                int amount = Integer.parseInt(amountMsg[1]);
+                Platform.runLater(() -> gameUpdateListiner.UpdateAmountOfRightPlayers(amount));
             }
             else
             {

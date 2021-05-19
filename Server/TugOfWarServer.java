@@ -2,6 +2,7 @@ package Server;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.LinkedList;
 
 public class TugOfWarServer
 {
@@ -11,9 +12,8 @@ public class TugOfWarServer
         int portNumber = 4444;
         ServerSocket serverSocket = null;
 
-
         ServerBehaviour server = new ServerBehaviour();
-        ClientThread[] clientThreads = new ClientThread[server.maxPlayers];
+        LinkedList <ClientThread> clientThreads = new  LinkedList <ClientThread>();
 
         try
         {
@@ -48,10 +48,26 @@ public class TugOfWarServer
                     ClientThread newClient = new ClientThread(clientSocket, server);
                     int currnetAmountOfClients = server.GetAmountOfClients();
     
-                    clientThreads[currnetAmountOfClients] = new ClientThread(newClient);
-                    clientThreads[currnetAmountOfClients].start();
-    
-                    server.IncreaseAmountOfClientsBy(1);
+                    clientThreads.add(new ClientThread(newClient)) ;
+                    server.IncreaseAmountOfClientsBy(1, newClient.GetTeam());
+
+                    clientThreads.get(currnetAmountOfClients).SetCommunicationWithClient();
+                    clientThreads.get(currnetAmountOfClients).start();
+
+                    for(int i = 0; i <= currnetAmountOfClients; i++)
+                    {
+                        System.out.println("Amount of clients " + currnetAmountOfClients);
+                        clientThreads.get(i).ClientUpdateTeamsNumber();
+                    }
+                }
+
+                for(int i = 0; i <= server.GetAmountOfClients(); i++)
+                {
+                    if(!clientThreads.get(i).isAlive())
+                    {
+                        clientThreads.get(i).stop();
+                        clientThreads.remove(i);
+                    }
                 }
             }
         }

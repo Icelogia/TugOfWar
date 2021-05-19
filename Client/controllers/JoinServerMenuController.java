@@ -63,6 +63,7 @@ public class JoinServerMenuController
         Stage appStage = (Stage)((Node)event.getSource()).getScene().getWindow();
         appStage.hide();
         appStage.setScene(scene);
+        appStage.setTitle("Game Window");
         appStage.show();
     }
 
