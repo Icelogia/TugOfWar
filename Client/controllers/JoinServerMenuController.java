@@ -9,23 +9,25 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
 public class JoinServerMenuController
 {
-    private String serverIP = "localhost";
-    private int port = 4444;
-
-    @FXML
-    private Pane joinServerMenuPane;
-
     @FXML
     private TextField serverIPField;
 
     @FXML
     private TextField portField;
+
+    @FXML
+    private Text connectionText;
+
+    private String serverIP = "localhost";
+    private int port = 4444;
 
     @FXML
     public void SetServerIP()
@@ -43,18 +45,22 @@ public class JoinServerMenuController
     public void JoinToServer(ActionEvent event)
     {
         var loader = new FXMLLoader(getClass().getResource("../view/GameWindow.fxml"));
-        Pane pane = null;
-        try 
-        {
-            pane = loader.load();
-        } 
-        catch (IOException e) 
-        {
-            e.printStackTrace();
-        }
+        boolean didSettingSucceeded = SetGameControllerSucceeeded(loader);
 
-        SetGameController(loader);
-        ActiveGameScene(pane, event);
+        if(didSettingSucceeded)
+        {
+            Pane pane = null;
+            try 
+            {
+                pane = loader.load();
+            } 
+            catch (IOException e) 
+            {
+                e.printStackTrace();
+            }
+            
+            ActiveGameScene(pane, event);
+        }
     }
 
     private void ActiveGameScene(Pane pane, ActionEvent event) 
@@ -77,20 +83,30 @@ public class JoinServerMenuController
         } 
         catch (UnknownHostException e) 
         {
-            e.printStackTrace();
+            System.out.println(connectionText);
+            connectionText.setText("Couldn't Connect");
         } 
         catch (IOException e) 
         {
-            e.printStackTrace();
+            System.out.println(connectionText);
+            connectionText.setText("Couldn't Connect");
         }
 
         return socket;
     }
     
-    private void SetGameController(FXMLLoader loader)
+    private boolean SetGameControllerSucceeeded(FXMLLoader loader)
     {
-        GameWindowController gameController = loader.getController();
         Socket socket = GetClientSocket();
-        gameController.SetClientSocket(socket);
+        if(socket != null)
+        {
+            GameWindowController gameController = loader.getController();
+            gameController.SetClientSocket(socket);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

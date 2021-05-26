@@ -19,7 +19,6 @@ public class TugOfWarClient extends Application
         var loader = new FXMLLoader(this.getClass().getResource("view/JoinServerMenu.fxml"));
         Pane pane = loader.load();
         var scene = new Scene(pane);
-
         primaryStage.setScene(scene);
         primaryStage.setTitle("JoinWindow");
         primaryStage.show();
