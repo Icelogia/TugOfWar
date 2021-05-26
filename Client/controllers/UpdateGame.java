@@ -2,7 +2,6 @@ package Client.controllers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javafx.application.Platform;
 import javafx.scene.image.ImageView;
@@ -11,7 +10,6 @@ public class UpdateGame extends Thread
 {
     private ImageView rope;
     private BufferedReader bf;
-    private PrintWriter pr;
     private boolean isGameInProgress = true;
     
     final String winInfo = "You win!";
@@ -22,10 +20,9 @@ public class UpdateGame extends Thread
 
     double newXPosition = 0;
 
-    public UpdateGame(BufferedReader bf, PrintWriter pr, ImageView rope, OnGameUpdateListiner  listiner)
+    public UpdateGame(BufferedReader bf, ImageView rope, OnGameUpdateListiner  listiner)
     {
         this.bf = bf;
-        this.pr = pr;
         this.rope = rope;
         this.gameUpdateListiner = listiner;
         newXPosition = rope.getX();
@@ -36,16 +33,9 @@ public class UpdateGame extends Thread
     {
         while(isGameInProgress)
         {
-            ServerActiveClient();
             GetInfoFromServer();
             SetRopePosition();
         } 
-    }
-
-    private void ServerActiveClient() 
-    {
-        pr.println("Active");
-        pr.flush();
     }
 
     private void SetRopePosition() 
@@ -58,14 +48,13 @@ public class UpdateGame extends Thread
         try 
         {
             String msg = bf.readLine();
-            System.out.println(msg);
-
+            
             if(msg.equals("Win"))
             {
                 isGameInProgress = false;
                 Platform.runLater(() -> gameUpdateListiner.FinishGame(winInfo));
             }
-            else if(msg.equals("Lose"))
+                else if(msg.equals("Lose"))
             {
                 isGameInProgress = false;
                 Platform.runLater(() -> gameUpdateListiner.FinishGame(loseInfo));
@@ -75,8 +64,7 @@ public class UpdateGame extends Thread
                 System.out.println(msg + " " + "Update ");
                 String[] amountMsg = msg.split(" ");
                 int amount = Integer.parseInt(amountMsg[1]);
-                Platform.runLater(() -> gameUpdateListiner.UpdateAmountOfLeftPlayers(amount));
-                
+                Platform.runLater(() -> gameUpdateListiner.UpdateAmountOfLeftPlayers(amount)); 
             }
             else if(msg.contains("Right"))
             {
@@ -89,7 +77,6 @@ public class UpdateGame extends Thread
             {
                 newXPosition = Integer.parseInt(msg);
             }
-            
         } 
         catch (IOException e) 
         {

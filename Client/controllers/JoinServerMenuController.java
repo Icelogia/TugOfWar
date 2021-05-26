@@ -9,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -28,6 +27,7 @@ public class JoinServerMenuController
 
     private String serverIP = "localhost";
     private int port = 4444;
+    private boolean canConnect = true;
 
     @FXML
     public void SetServerIP()
@@ -44,23 +44,24 @@ public class JoinServerMenuController
     @FXML
     public void JoinToServer(ActionEvent event)
     {
+        canConnect = true;
         var loader = new FXMLLoader(getClass().getResource("../view/GameWindow.fxml"));
-        boolean didSettingSucceeded = SetGameControllerSucceeeded(loader);
 
-        if(didSettingSucceeded)
+        Pane pane = null;
+        try 
         {
-            Pane pane = null;
-            try 
-            {
-                pane = loader.load();
-            } 
-            catch (IOException e) 
-            {
-                e.printStackTrace();
-            }
-            
-            ActiveGameScene(pane, event);
+            pane = loader.load();
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
         }
+
+        if(canConnect)
+        {
+            SetGameController(loader);
+            ActiveGameScene(pane, event);
+        } 
     }
 
     private void ActiveGameScene(Pane pane, ActionEvent event) 
@@ -95,18 +96,17 @@ public class JoinServerMenuController
         return socket;
     }
     
-    private boolean SetGameControllerSucceeeded(FXMLLoader loader)
+    private void SetGameController(FXMLLoader loader)
     {
         Socket socket = GetClientSocket();
         if(socket != null)
         {
             GameWindowController gameController = loader.getController();
             gameController.SetClientSocket(socket);
-            return true;
         }
         else
         {
-            return false;
+            canConnect = false;
         }
     }
 }

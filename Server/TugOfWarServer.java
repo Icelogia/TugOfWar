@@ -70,6 +70,8 @@ public class TugOfWarServer
                     }
                 }
             }
+        
+            server.SetClientsThread(clientThreads);
         }
 
 

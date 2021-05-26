@@ -1,16 +1,19 @@
 package Server;
 
+import java.util.LinkedList;
+
 public class ServerBehaviour
 {
     private int amountOfLeftTeam;
     private int amountOfRightTeam;
-    public final int maxPlayers = 2;
+    public final int maxPlayers = 1;
     private int currnetAmountOfClients = 0;
     private boolean isGameInProgress = false;
 
     final private int amountOfPixelsToMove = 5;
     private int ropePosition = 0;
     private int ropeWinLength = 100;
+    LinkedList <ClientThread> clientThreads;
 
     private Team winTeam;
 
@@ -66,11 +69,22 @@ public class ServerBehaviour
         return this.currnetAmountOfClients == this.maxPlayers;
     }
 
+    public void SetClientsThread(LinkedList<ClientThread> clients)  
+    {
+        clientThreads = clients;
+    }
+
     synchronized public void MoveRope(int direction)
     {
         
         ropePosition += direction * amountOfPixelsToMove;
         System.out.println("Rope position: " + ropePosition);
+        
+        for (ClientThread client : clientThreads) 
+        {
+            client.ClientSendRopePosition(ropePosition);
+        }
+ 
         
         if(Math.abs(ropePosition) >= ropeWinLength)
         {
@@ -93,11 +107,6 @@ public class ServerBehaviour
             winTeam = Team.Right;
             System.out.println("Team right win");
         }
-    }
-
-    public int GetRopePositionTowardsZero()
-    {
-        return ropePosition;
     }
 
     public Team GetWinTeam()

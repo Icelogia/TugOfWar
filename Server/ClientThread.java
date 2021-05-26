@@ -70,8 +70,6 @@ public class ClientThread extends Thread
             System.out.println("Client direction " + clientDirection);
             //get input
             ClientInput();
-            //give output to client
-            ClientSendRopePosition();
         }
 
         //Send info about winner team
@@ -84,10 +82,9 @@ public class ClientThread extends Thread
         return this.team;
     }
 
-    private void ClientSendRopePosition() 
+    public void ClientSendRopePosition(int ropePosition) 
     {
-        System.out.println(clientDirection + "4");
-        pr.println(server.GetRopePositionTowardsZero());
+        pr.println(ropePosition);
         pr.flush();
     }
 
@@ -120,13 +117,10 @@ public class ClientThread extends Thread
         try 
         {
             String clientMsg = bf.readLine();
-            System.out.println(clientDirection + "2");
             if(clientMsg.equals("Pull"))
             {
-                System.out.println(clientDirection + "4");
                 server.MoveRope(clientDirection);
-            }
-                
+            } 
         } 
         catch (IOException e) 
         {

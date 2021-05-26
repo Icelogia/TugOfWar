@@ -55,7 +55,7 @@ public class GameWindowController implements OnGameUpdateListiner
 
     public void StartGame()
     {
-        UpdateGame update = new UpdateGame(bf,pr, rope, this);
+        UpdateGame update = new UpdateGame(bf, rope, this);
         update.start();
     }
 
