@@ -12,9 +12,11 @@ public class UpdateGame extends Thread
     private BufferedReader bf;
     private boolean isGameInProgress = true;
     
-    final String winInfo = "You win!";
-    final String loseInfo = "You lose!";
-    final String activeMsg = "Active";
+    final private String winInfo = "You win!";
+    final private  String loseInfo = "You lose!";
+    final private  String activeMsg = "Active";
+
+    final private  String lostConnectionInfo = "Lost connection!";
     
     OnGameUpdateListiner  gameUpdateListiner;
 
@@ -48,13 +50,13 @@ public class UpdateGame extends Thread
         try 
         {
             String msg = bf.readLine();
-            
+
             if(msg.equals("Win"))
             {
                 isGameInProgress = false;
                 Platform.runLater(() -> gameUpdateListiner.FinishGame(winInfo));
             }
-                else if(msg.equals("Lose"))
+            else if(msg.equals("Lose"))
             {
                 isGameInProgress = false;
                 Platform.runLater(() -> gameUpdateListiner.FinishGame(loseInfo));
@@ -80,7 +82,8 @@ public class UpdateGame extends Thread
         } 
         catch (IOException e) 
         {
-            e.printStackTrace();
+            isGameInProgress = false;
+            Platform.runLater(() -> gameUpdateListiner.FinishGame(lostConnectionInfo));
         }
     }
 }
